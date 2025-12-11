@@ -81,9 +81,7 @@ export default function ToolFormModal({
                 {headerTitle}
               </h2>
               <p className="text-sm text-zinc-500">
-                {formData.appType === "html"
-                  ? "Provide the iframe HTML snippet exactly as you want it rendered."
-                  : "Upload a zip file containing your built React app (must include index.html)."}
+                Upload a zip file containing your built React app (must include index.html).
               </p>
             </div>
             <button
@@ -194,69 +192,34 @@ export default function ToolFormModal({
               />
             </label>
 
-            <label className="flex flex-col gap-2 text-sm font-medium text-zinc-700">
-              App Type
-              <select
+            <label className="flex flex-col gap-2 text-sm font-medium text-zinc-700 md:col-span-2">
+              React App (ZIP file)
+              <input
+                type="file"
+                accept=".zip,application/zip"
                 className="rounded border border-zinc-300 px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
-                value={formData.appType || "html"}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    appType: e.target.value as "html" | "react",
-                  }))
-                }
-                disabled={Boolean(editing)}
-              >
-                <option value="html">HTML</option>
-                <option value="react">React App</option>
-              </select>
-              {editing && (
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setReactAppFile(file);
+                  }
+                }}
+                required={!editing}
+              />
+              <span className="text-xs font-normal text-zinc-500">
+                Upload a zip file containing your built React app. Must include index.html in the root.
+              </span>
+              {reactAppFile && (
+                <span className="text-xs font-normal text-green-600">
+                  Selected: {reactAppFile.name}
+                </span>
+              )}
+              {editing && editing.reactAppUrl && (
                 <span className="text-xs font-normal text-zinc-500">
-                  App type cannot be changed after creation.
+                  Current app URL: {editing.reactAppUrl}
                 </span>
               )}
             </label>
-
-            {formData.appType === "html" ? (
-              <label className="flex flex-col gap-2 text-sm font-medium text-zinc-700 md:col-span-2">
-                Iframe HTML
-                <textarea
-                  placeholder="<html>...</html>"
-                  className="h-48 rounded border border-zinc-300 px-3 py-2 font-mono text-xs text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
-                  required={formData.appType === "html"}
-                  {...bindField("iframeHtml")}
-                />
-              </label>
-            ) : (
-              <label className="flex flex-col gap-2 text-sm font-medium text-zinc-700 md:col-span-2">
-                React App (ZIP file)
-                <input
-                  type="file"
-                  accept=".zip,application/zip"
-                  className="rounded border border-zinc-300 px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      setReactAppFile(file);
-                    }
-                  }}
-                  required={!editing && formData.appType === "react"}
-                />
-                <span className="text-xs font-normal text-zinc-500">
-                  Upload a zip file containing your built React app. Must include index.html in the root.
-                </span>
-                {reactAppFile && (
-                  <span className="text-xs font-normal text-green-600">
-                    Selected: {reactAppFile.name}
-                  </span>
-                )}
-                {editing && editing.appType === "react" && editing.reactAppUrl && (
-                  <span className="text-xs font-normal text-zinc-500">
-                    Current app URL: {editing.reactAppUrl}
-                  </span>
-                )}
-              </label>
-            )}
 
             <div className="flex items-center gap-3 md:col-span-2">
               <button

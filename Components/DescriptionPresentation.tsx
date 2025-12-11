@@ -24,13 +24,14 @@ export default function DescriptionPresentation({
           } sm:items-center`}
         >
           <div className="relative h-48 w-full flex-shrink-0 overflow-hidden rounded-md bg-zinc-100 sm:h-40 sm:w-48">
-            <Image
+            {block.image?<Image
               src={block.image}
               alt={`${toolTitle} - Description image ${index + 1}`}
               fill
               sizes="(min-width: 640px) 192px, 100vw"
               className="object-cover"
-            />
+            />:<p>Image not found</p>
+            }
           </div>
           <div className="flex-1">
             <p className="text-sm leading-6 text-zinc-600 whitespace-pre-line">

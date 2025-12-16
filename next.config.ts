@@ -51,7 +51,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Access-Control-Allow-Origin",
-            value: "*",
+            value: "https://utilas.vercel.app",
           },
           {
             key: "Access-Control-Allow-Methods",

@@ -4,6 +4,7 @@ import { ChangeEvent, useEffect } from "react";
 import { MiniTool } from "@/lib/api";
 import DescriptionBlocksEditor from "./DescriptionBlocksEditor";
 import {MiniToolPayloadDto} from "@/lib/api";
+import {ImageUploadComponent} from "@/Components/ImageUploadComponent";
 
 type ToolFormModalProps = {
   bindField: <K extends keyof MiniToolPayloadDto>(
@@ -170,18 +171,13 @@ export default function ToolFormModal({
                 }))
               }
             />
-
-            <label className="flex flex-col gap-2 text-sm font-medium text-zinc-700">
-              Thumbnail URL
-              <input
-                type="url"
-                placeholder="https://"
-                className="rounded border border-zinc-300 px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
-                required
-                {...bindField("thumbnail")}
-              />
-            </label>
-
+            <ImageUploadComponent
+                isRequired={!editing && !formData.thumbnail}
+                isDisabled={saving}
+                onConverted={(base64) =>
+                  setFormData((prev) => ({ ...prev, thumbnail: base64 }))
+                }
+            />
             <label className="flex flex-col gap-2 text-sm font-medium text-zinc-700">
               Iframe slug
               <input

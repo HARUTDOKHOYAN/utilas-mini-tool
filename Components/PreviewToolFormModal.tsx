@@ -3,6 +3,7 @@
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { MiniToolPrev, MiniToolPrevPayload, searchTools } from "@/lib/api";
 import SearchInput from "@/Components/SearchInput";
+import {ImageUploadComponent} from "@/Components/ImageUploadComponent";
 
 type PreviewToolFormModalProps = {
   bindField: <K extends keyof MiniToolPrevPayload>(
@@ -25,7 +26,6 @@ type PreviewToolFormModalProps = {
 
 export default function PreviewToolFormModal({
   isOpen,
-  formData,
   editing,
   error,
   successMessage,
@@ -279,7 +279,11 @@ export default function PreviewToolFormModal({
                 {...bindField("thumbnail")}
               />
             </label>
-
+            <ImageUploadComponent
+                onConverted={(base64) =>
+                    setFormData((prev) => ({ ...prev, thumbnail: base64 }))
+                }
+            />
             <div className="flex items-center gap-3 md:col-span-2">
               <button
                 type="submit"

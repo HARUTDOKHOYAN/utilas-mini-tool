@@ -1,6 +1,7 @@
 "use client";
 
-import { DescriptionBlock } from "@/lib/api";
+import {DescriptionBlock} from "@/lib/models/DTOs/MiniToolDto";
+import {ImageUploadComponent} from "@/Components/ImageUploadComponent";
 
 type DescriptionBlocksEditorProps = {
   description: DescriptionBlock[];
@@ -86,19 +87,8 @@ export default function DescriptionBlocksEditor({
               </div>
 
               <div className="grid gap-3 md:grid-cols-2">
-                <label className="flex flex-col gap-1 text-xs font-medium text-zinc-700">
-                  Image URL
-                  <input
-                    type="url"
-                    placeholder="https://example.com/image.jpg"
-                    className="rounded border border-zinc-300 px-2 py-1.5 text-sm text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
-                    required
-                    value={block.image}
-                    onChange={(e) =>
-                      handleUpdateBlock(index, "image", e.target.value)
-                    }
-                  />
-                </label>
+                <ImageUploadComponent onConverted={ (base64) =>
+                    handleUpdateBlock(index, "image", base64)}/>
 
                 <label className="flex flex-col gap-1 text-xs font-medium text-zinc-700">
                   Orientation

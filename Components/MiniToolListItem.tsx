@@ -54,19 +54,25 @@ export default function MiniToolListItem({
         </div>
       </div>
       <div className="flex flex-wrap items-center gap-3">
+        <Link
+            href={`/tools/${tool.toolId}`}
+            className="rounded-md border border-blue-500 px-3 py-2 text-sm font-medium text-blue-600 transition hover:bg-blue-50"
+        >
+          View
+        </Link>
         <button
-          type="button"
-          className="rounded-md border border-blue-500 px-3 py-2 text-sm font-medium text-blue-600 transition hover:bg-blue-50"
-          onClick={handleEdit}
-          disabled={saving && !isPreviewOnly && editing?.id === tool.toolId}
+            type="button"
+            className="rounded-md border border-blue-500 px-3 py-2 text-sm font-medium text-blue-600 transition hover:bg-blue-50"
+            onClick={handleEdit}
+            disabled={saving && !isPreviewOnly && editing?.id === tool.toolId}
         >
           Edit
         </button>
         <button
-          type="button"
-          className="rounded-md border border-red-500 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50"
-          onClick={handleDelete}
-          disabled={saving}
+            type="button"
+            className="rounded-md border border-red-500 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50"
+            onClick={handleDelete}
+            disabled={saving}
         >
           Delete
         </button>

@@ -4,9 +4,11 @@
     id: string;
     title: string;
     summary: string;
+    keyFeatures: KeyFeatureBlock[];
     description: DescriptionBlock[];
     thumbnail: string;
     iframeSlug: string;
+    tags?: string[];
     iframeHtml?: string;
     reactAppUrl?: string;
     appType?: "html" | "react";
@@ -20,4 +22,10 @@ export type DescriptionBlock = {
     image: string;
     text: string;
     orientation: "left" | "right";
+};
+
+export type KeyFeatureBlock = {
+    image: string;
+    title: string;
+    description: string;
 };

@@ -4,4 +4,5 @@ export type MiniToolPrevDto = {
     summary: string;
     thumbnail: string;
     toolId: string;
+    tags?: string[];
 };

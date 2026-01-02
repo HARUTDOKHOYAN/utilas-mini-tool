@@ -3,6 +3,8 @@
 import { ChangeEvent, useEffect } from "react";
 import { MiniTool } from "@/lib/api";
 import DescriptionBlocksEditor from "./DescriptionBlocksEditor";
+import KeyFeaturesBlocksEditor from "./KeyFeaturesBlocksEditor";
+import TagSelector from "./TagSelector";
 import {MiniToolPayloadDto} from "@/lib/api";
 import {ImageUploadComponent} from "@/Components/ImageUploadComponent";
 
@@ -157,6 +159,32 @@ export default function ToolFormModal({
                 {...bindField("summary")}
               />
             </label>
+
+            <div className="md:col-span-2">
+              <TagSelector
+                selectedTags={Array.isArray(formData.tags) ? formData.tags : []}
+                onChange={(tags) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    tags: tags,
+                  }))
+                }
+              />
+            </div>
+
+            <KeyFeaturesBlocksEditor
+              keyFeatures={
+                Array.isArray(formData.keyFeatures)
+                  ? formData.keyFeatures
+                  : []
+              }
+              onChange={(newFeatures) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  keyFeatures: newFeatures,
+                }))
+              }
+            />
 
             <DescriptionBlocksEditor
               description={

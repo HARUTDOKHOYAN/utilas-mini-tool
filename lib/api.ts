@@ -8,7 +8,6 @@ export type MiniToolPayloadDto = Omit<
     "_id" | "createdAt" | "updatedAt" | "iframeUrl" | "reactAppUrl"
 >;
 
-// Backwards-compatible public types (used across pages/components)
 export type MiniTool = MiniToolDto;
 export type MiniToolPrev = MiniToolPrevDto;
 

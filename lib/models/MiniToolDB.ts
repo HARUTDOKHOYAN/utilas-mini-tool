@@ -10,6 +10,14 @@ const DescriptionBlockSchema = new mongoose.Schema({
   },
 });
 
+const KeyFeaturesBlockSchema = new mongoose.Schema(
+    {
+        image: { type: String, required: true },
+        title: { type: String, required: true },
+        description: { type: String, required: true },
+    }
+)
+
 const miniToolSchema = new mongoose.Schema(
   {
     id: {
@@ -28,6 +36,11 @@ const miniToolSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    keyFeatures:{
+        type: [KeyFeaturesBlockSchema],
+        required: true,
+        trim: true,
+      },
     description: {
       type: [DescriptionBlockSchema],
       required: true,
@@ -45,9 +58,6 @@ const miniToolSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
     },
-    iframeHtml: {
-      type: String,
-    },
     reactAppUrl: {
       type: String,
       trim: true,
@@ -59,6 +69,11 @@ const miniToolSchema = new mongoose.Schema(
     appType: {
       type: String,
       default: 'html',
+    },
+    tags: {
+      type: [String],
+      default: [],
+      trim: true,
     },
   },
   {

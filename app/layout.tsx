@@ -39,13 +39,6 @@ export default function RootLayout({
                   MiniTools
                 </Link>
                 <nav className="flex items-center gap-6 text-sm font-medium text-zinc-600">
-                  <Link
-                    href="/"
-                    className="transition hover:text-zinc-900"
-                    prefetch={false}
-                  >
-                    Catalog
-                  </Link>
                   <UserMenu />
                 </nav>
               </div>

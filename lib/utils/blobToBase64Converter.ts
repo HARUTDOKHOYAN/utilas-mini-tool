@@ -67,7 +67,7 @@ export async function uploadImageToBase64(source: string | File | Blob): Promise
 
     const dataUrl = await blobToDataUrl(blob, mime);
 
-    // Ensure output is an image data URL (FileReader will produce it; Node path constructs it).
+
     if (!dataUrl.startsWith("data:image/")) {
         throw new Error("Failed to convert image to Base64.");
     }

@@ -48,6 +48,18 @@ export default function MiniToolListItem({
           )}
         </div>
         <p className="mt-1 text-sm text-zinc-600">{tool.summary}</p>
+        {tool.tags && tool.tags.length > 0 && (
+          <div className="mt-2 flex flex-wrap gap-2">
+            {tool.tags.map((tag) => (
+              <span
+                key={tag}
+                className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
         <div className="mt-2 flex flex-wrap items-center gap-3 text-xs uppercase tracking-wide text-zinc-400">
           <span>Preview ID: {tool.id}</span>
           <span>Tool ID: {tool.toolId}</span>

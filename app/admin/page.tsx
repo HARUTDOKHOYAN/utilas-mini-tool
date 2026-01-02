@@ -24,16 +24,19 @@ import SearchInput from "@/Components/SearchInput";
 import {useToolSearch} from "@/hooks/useToolSearch";
 import PreviewToolFormModal from "@/Components/PreviewToolFormModal";
 import {ApiError, MiniToolPayloadDto} from "@/lib/api";
+import { ensureTagsExist } from "@/lib/utils/tagHelpers";
 
 const defaultForm: MiniToolPayloadDto = {
   id: "",
   title: "",
   summary: "",
+  keyFeatures: [],
   description: [],
   thumbnail: "",
   iframeSlug: "",
   iframeHtml: "",
   appType: "html",
+  tags: [],
 };
 
 const defaultPreviewForm: MiniToolPrevPayload = {
@@ -42,6 +45,7 @@ const defaultPreviewForm: MiniToolPrevPayload = {
   summary: "",
   thumbnail: "",
   toolId: "",
+  tags: [],
 };
 
 export default function AdminPage() {
@@ -166,11 +170,13 @@ export default function AdminPage() {
         id: tool.id,
         title: tool.title,
         summary: tool.summary,
+        keyFeatures: Array.isArray(tool.keyFeatures) ? tool.keyFeatures : [],
         description: Array.isArray(tool.description) ? tool.description : [],
         thumbnail: tool.thumbnail,
         iframeSlug: tool.iframeSlug,
         iframeHtml: tool.iframeHtml || "",
         appType: tool.appType || "html",
+        tags: Array.isArray(tool.tags) ? tool.tags : [],
       });
       setReactAppFile(null);
       setIsModalOpen(true);
@@ -212,6 +218,7 @@ export default function AdminPage() {
       summary: toolPrev.summary,
       thumbnail: toolPrev.thumbnail,
       toolId: toolPrev.toolId,
+      tags: Array.isArray(toolPrev.tags) ? toolPrev.tags : [],
     });
     setIsPreviewModalOpen(true);
   }
@@ -249,6 +256,23 @@ export default function AdminPage() {
       return;
     }
 
+    // Validate key features
+    if (!Array.isArray(formData.keyFeatures) || formData.keyFeatures.length === 0) {
+      setError("Please add at least one key feature.");
+      setSaving(false);
+      return;
+    }
+
+    // Validate each key feature
+    for (let i = 0; i < formData.keyFeatures.length; i++) {
+      const feature = formData.keyFeatures[i];
+      if (!feature.image || !feature.title || !feature.description) {
+        setError(`Key feature ${i + 1} is incomplete. Please fill in all fields.`);
+        setSaving(false);
+        return;
+      }
+    }
+
     // Validate description blocks
     if (!Array.isArray(formData.description) || formData.description.length === 0) {
       setError("Please add at least one description block.");
@@ -267,6 +291,11 @@ export default function AdminPage() {
     }
 
     try {
+      // Ensure all tags exist in the database before saving
+      if (formData.tags && Array.isArray(formData.tags) && formData.tags.length > 0) {
+        await ensureTagsExist(formData.tags);
+      }
+
       if (editing) {
         const { id: preservedId, ...rest } = formData;
         // Remove iframeHtml for React apps
@@ -331,6 +360,11 @@ export default function AdminPage() {
     }
 
     try {
+      // Ensure all tags exist in the database before saving
+      if (previewFormData.tags && Array.isArray(previewFormData.tags) && previewFormData.tags.length > 0) {
+        await ensureTagsExist(previewFormData.tags);
+      }
+
       if (previewEditing) {
         const { id, ...rest } = previewFormData;
         const updated = await updateToolPreview(id, rest);
@@ -401,12 +435,6 @@ export default function AdminPage() {
           >
             + Add Preview Tool
           </button>
-          <Link
-            href="/"
-            className="text-sm font-medium text-blue-600 hover:underline"
-          >
-            ← Back to library
-          </Link>
         </div>
       </div>
 

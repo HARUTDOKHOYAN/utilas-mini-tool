@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { DescriptionBlock } from "@/lib/api";
+import {DescriptionBlock} from "@/lib/models/DTOs/MiniToolDto";
 
 type DescriptionPresentationProps = {
   description: DescriptionBlock[];
@@ -17,27 +17,56 @@ export default function DescriptionPresentation({
   return (
     <div className="flex flex-col gap-8">
       {description.map((block, index) => (
-        <div
-          key={index}
-          className={`flex flex-col gap-4 ${
-            block.orientation === "right" ? "sm:flex-row-reverse" : "sm:flex-row"
-          } sm:items-center`}
-        >
-          <div className="relative h-48 w-full flex-shrink-0 overflow-hidden rounded-md bg-zinc-100 sm:h-40 sm:w-48">
-            {block.image?<Image
-              src={block.image}
-              alt={`${toolTitle} - Description image ${index + 1}`}
-              fill
-              sizes="(min-width: 640px) 192px, 100vw"
-              className="object-cover"
-            />:<p>Image not found</p>
-            }
-          </div>
-          <div className="flex-1">
-            <p className="text-sm leading-6 text-zinc-600 whitespace-pre-line">
-              {block.text}
-            </p>
-          </div>
+        <div key={index} className="overflow-hidden rounded-md border border-zinc-200">
+          <table className="w-full text-sm">
+            <tbody className="divide-y divide-zinc-200">
+              <tr className="align-top">
+                <td className="w-40 bg-zinc-50 px-4 py-3 font-medium text-zinc-700">
+                  Block
+                </td>
+                <td className="px-4 py-3 text-zinc-900">#{index + 1}</td>
+              </tr>
+
+              <tr className="align-top">
+                <td className="bg-zinc-50 px-4 py-3 font-medium text-zinc-700">
+                  Orientation
+                </td>
+                <td className="px-4 py-3 text-zinc-900">
+                  {block.orientation || "—"}
+                </td>
+              </tr>
+
+              <tr className="align-top">
+                <td className="bg-zinc-50 px-4 py-3 font-medium text-zinc-700">
+                  Text
+                </td>
+                <td className="px-4 py-3 text-zinc-900 whitespace-pre-line">
+                  {block.text || "—"}
+                </td>
+              </tr>
+
+              <tr className="align-top">
+                <td className="bg-zinc-50 px-4 py-3 font-medium text-zinc-700">
+                  Image
+                </td>
+                <td className="px-4 py-3 text-zinc-900">
+                  {block.image ? (
+                    <div className="relative h-28 w-44 overflow-hidden rounded-md bg-zinc-100">
+                      <Image
+                        src={block.image}
+                        alt={`${toolTitle} - Description image ${index + 1}`}
+                        fill
+                        sizes="176px"
+                        className="object-cover"
+                      />
+                    </div>
+                  ) : (
+                    "—"
+                  )}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       ))}
     </div>

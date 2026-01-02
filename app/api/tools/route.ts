@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     await connectDB();
 
     const body = await request.json();
-    const { id, title, summary, description, thumbnail, iframeSlug, appType } = body;
+    const { id, title, summary, keyFeatures, description, thumbnail, iframeSlug, appType, tags } = body;
 
     if (
       !id ||
@@ -83,26 +83,39 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const createData = {
+    const createData: any = {
       id,
       title,
       summary,
+      keyFeatures,
       description,
       thumbnail,
       iframeSlug,
       appType: appType,
     };
 
+    // Add tags if provided
+    if (tags && Array.isArray(tags)) {
+      createData.tags = tags;
+    }
+
     const created = await MiniToolDB.create(createData);
 
     // Create preview entry
-    await MiniToolPrev.create({
+    const previewData: any = {
       id: created.id, // using the same unique id
       title: created.title,
       summary: created.summary,
       thumbnail: created.thumbnail,
       toolId: created.id,
-    });
+    };
+
+    // Add tags to preview if provided
+    if (tags && Array.isArray(tags)) {
+      previewData.tags = tags;
+    }
+
+    await MiniToolPrev.create(previewData);
 
     return NextResponse.json(withIframeUrl(created), { status: 201 });
   } catch (error: any) {

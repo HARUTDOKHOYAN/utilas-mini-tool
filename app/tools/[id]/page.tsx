@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getTool } from "@/lib/api";
 import DescriptionPresentation from "@/Components/DescriptionPresentation";
+import KeyFeaturesPresentation from "@/Components/KeyFeaturesPresentation";
 import { getServerSession } from "@/lib/auth";
 import {ApiError} from "@/lib/api";
 
@@ -42,30 +43,88 @@ export default async function ToolDetailPage({
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-4xl flex-col gap-10 px-6 py-12">
-      <Link href="/" className="text-sm text-blue-600 hover:underline">
-        ← Back to library
-      </Link>
+      <header className="flex flex-col gap-4 rounded-lg border border-zinc-200 bg-white p-6 shadow-sm">
+        <h1 className="text-3xl font-bold text-zinc-900">{tool.title}</h1>
 
-      <header className="flex flex-col gap-6 rounded-lg border border-zinc-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center">
-        <div className="relative h-44 w-full flex-shrink-0 overflow-hidden rounded-md bg-zinc-100 sm:h-36 sm:w-56">
-          <Image
-            src={tool.thumbnail}
-            alt={tool.title}
-            fill
-            sizes="(min-width: 640px) 224px, 100vw"
-            className="object-cover"
-          />
-        </div>
-        <div className="flex flex-1 flex-col gap-3">
-          <h1 className="text-3xl font-bold text-zinc-900">{tool.title}</h1>
-          <p className="text-base text-zinc-600">{tool.summary}</p>
-          <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-wide text-zinc-400">
-            <span>Tool ID: {tool.id}</span>
-            <span>Slug: {tool.iframeSlug}</span>
-            <span>Type: {tool.appType || "html"}</span>
-          </div>
+        <div className="overflow-hidden rounded-md border border-zinc-200">
+          <table className="w-full text-sm">
+            <tbody className="divide-y divide-zinc-200">
+              <tr className="align-top">
+                <td className="w-40 bg-zinc-50 px-4 py-3 font-medium text-zinc-700">
+                  Tool ID
+                </td>
+                <td className="px-4 py-3 text-zinc-900">{tool.id}</td>
+              </tr>
+
+              <tr className="align-top">
+                <td className="bg-zinc-50 px-4 py-3 font-medium text-zinc-700">
+                  Slug
+                </td>
+                <td className="px-4 py-3 text-zinc-900">{tool.iframeSlug}</td>
+              </tr>
+
+              <tr className="align-top">
+                <td className="bg-zinc-50 px-4 py-3 font-medium text-zinc-700">
+                  Summary
+                </td>
+                <td className="px-4 py-3 text-zinc-900">
+                  {tool.summary || "—"}
+                </td>
+              </tr>
+
+              <tr className="align-top">
+                <td className="bg-zinc-50 px-4 py-3 font-medium text-zinc-700">
+                  Thumbnail
+                </td>
+                <td className="px-4 py-3 text-zinc-900">
+                  {tool.thumbnail ? (
+                    <div className="relative h-28 w-44 overflow-hidden rounded-md bg-zinc-100">
+                      <Image
+                        src={tool.thumbnail}
+                        alt={tool.title}
+                        fill
+                        sizes="176px"
+                        className="object-cover"
+                      />
+                    </div>
+                  ) : (
+                    "—"
+                  )}
+                </td>
+              </tr>
+
+              {tool.tags && tool.tags.length > 0 && (
+                <tr className="align-top">
+                  <td className="bg-zinc-50 px-4 py-3 font-medium text-zinc-700">
+                    Tags
+                  </td>
+                  <td className="px-4 py-3 text-zinc-900">
+                    <div className="flex flex-wrap gap-2">
+                      {tool.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </header>
+
+      <section className="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm">
+        <h2 className="text-lg font-semibold text-zinc-900 mb-4">Key Features</h2>
+        {Array.isArray(tool.keyFeatures) && tool.keyFeatures.length > 0 ? (
+          <KeyFeaturesPresentation keyFeatures={tool.keyFeatures} />
+        ) : (
+          <p className="text-sm text-zinc-500 italic">No key features listed.</p>
+        )}
+      </section>
 
       <section className="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm">
         <h2 className="text-lg font-semibold text-zinc-900 mb-4">Description</h2>
@@ -73,7 +132,7 @@ export default async function ToolDetailPage({
           <DescriptionPresentation
             description={tool.description}
             toolTitle={tool.title}
-          />
+          /> 
         ) : (
           <p className="text-sm leading-6 text-zinc-600">
             {typeof tool.description === "string" ? tool.description : "No description available."}

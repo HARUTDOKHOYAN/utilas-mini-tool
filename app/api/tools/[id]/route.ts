@@ -118,17 +118,24 @@ export async function PUT(
       { new: true, runValidators: true }
     );
 
-    // Update preview entry if title, summary, or thumbnail changed
-    if (updates.title || updates.summary || updates.thumbnail) {
+    // Update preview entry if title, summary, thumbnail, or tags changed
+    if (updates.title || updates.summary || updates.thumbnail || updates.tags !== undefined) {
+      const previewUpdate: any = {
+        title: updated.title,
+        summary: updated.summary,
+        thumbnail: updated.thumbnail,
+      };
+      
+      // Sync tags if they were updated
+      if (updates.tags !== undefined) {
+        previewUpdate.tags = updated.tags || [];
+      }
+      
       await MiniToolPrev.findOneAndUpdate(
         // Only sync the canonical preview (created alongside the tool)
         // Custom previews must remain independent.
         { id, toolId: id },
-        {
-          title: updated.title,
-          summary: updated.summary,
-          thumbnail: updated.thumbnail,
-        }
+        previewUpdate
       );
     }
 

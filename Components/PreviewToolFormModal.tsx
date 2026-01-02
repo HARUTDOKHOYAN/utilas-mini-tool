@@ -3,6 +3,7 @@
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { MiniToolPrev, MiniToolPrevPayload, searchTools } from "@/lib/api";
 import SearchInput from "@/Components/SearchInput";
+import TagSelector from "@/Components/TagSelector";
 import {ImageUploadComponent} from "@/Components/ImageUploadComponent";
 
 type PreviewToolFormModalProps = {
@@ -34,6 +35,7 @@ export default function PreviewToolFormModal({
   onClose,
   onSubmit,
   bindField,
+  formData,
   setFormData,
 }: PreviewToolFormModalProps) {
   const [toolSearchQuery, setToolSearchQuery] = useState("");
@@ -268,6 +270,18 @@ export default function PreviewToolFormModal({
                 {...bindField("summary")}
               />
             </label>
+
+            <div className="md:col-span-2">
+              <TagSelector
+                selectedTags={Array.isArray(formData.tags) ? formData.tags : []}
+                onChange={(tags) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    tags: tags,
+                  }))
+                }
+              />
+            </div>
 
             <label className="flex flex-col gap-2 text-sm font-medium text-zinc-700 md:col-span-2">
               Thumbnail URL

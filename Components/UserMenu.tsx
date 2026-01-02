@@ -21,14 +21,7 @@ export default function UserMenu() {
 
   return (
     <div className="flex items-center gap-6">
-      <Link
-        href="/admin"
-        className="transition hover:text-zinc-900"
-        prefetch={false}
-      >
-        EditTool
-      </Link>
-      <div className="flex items-center gap-4 border-l border-zinc-200 pl-6">
+      <div className="flex items-center gap-4  border-zinc-200 pl-6">
         <span className="text-xs text-zinc-500 hidden sm:inline">
           {session?.user?.email}
         </span>
@@ -42,4 +35,5 @@ export default function UserMenu() {
     </div>
   );
 }
+
 

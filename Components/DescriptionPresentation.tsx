@@ -29,6 +29,35 @@ export default function DescriptionPresentation({
 
               <tr className="align-top">
                 <td className="bg-zinc-50 px-4 py-3 font-medium text-zinc-700">
+                  Title
+                </td>
+                <td className="px-4 py-3 text-zinc-900">
+                  {block.title || "—"}
+                </td>
+              </tr>
+
+              <tr className="align-top">
+                <td className="bg-zinc-50 px-4 py-3 font-medium text-zinc-700">
+                  Button Link
+                </td>
+                <td className="px-4 py-3 text-zinc-900">
+                  {block.buttonLink ? (
+                    <a
+                      href={block.buttonLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 underline break-all"
+                    >
+                      {block.buttonLink}
+                    </a>
+                  ) : (
+                    "—"
+                  )}
+                </td>
+              </tr>
+
+              <tr className="align-top">
+                <td className="bg-zinc-50 px-4 py-3 font-medium text-zinc-700">
                   Orientation
                 </td>
                 <td className="px-4 py-3 text-zinc-900">

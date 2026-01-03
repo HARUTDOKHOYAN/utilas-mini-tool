@@ -21,6 +21,8 @@
 export type DescriptionBlock = {
     image: string;
     text: string;
+    title: string;
+    buttonLink: string;
     orientation: "left" | "right";
 };
 

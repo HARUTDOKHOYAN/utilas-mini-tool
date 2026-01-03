@@ -94,6 +94,18 @@ export async function PUT(
             { status: 400 }
           );
         }
+        if (!block.title || typeof block.title !== 'string') {
+          return NextResponse.json(
+            { message: `Description block ${i + 1} must have a title.` },
+            { status: 400 }
+          );
+        }
+        if (!block.buttonLink || typeof block.buttonLink !== 'string') {
+          return NextResponse.json(
+            { message: `Description block ${i + 1} must have a button link.` },
+            { status: 400 }
+          );
+        }
         if (!block.orientation || !['left', 'right'].includes(block.orientation)) {
           return NextResponse.json(
             { message: `Description block ${i + 1} must have orientation 'left' or 'right'.` },

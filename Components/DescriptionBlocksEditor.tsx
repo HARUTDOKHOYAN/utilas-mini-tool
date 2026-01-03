@@ -15,7 +15,7 @@ export default function DescriptionBlocksEditor({
   const handleAddBlock = () => {
     onChange([
       ...description,
-      { image: "", text: "", orientation: "left" as const },
+      { image: "", text: "", title: "", buttonLink: "", orientation: "left" as const },
     ]);
   };
 
@@ -107,6 +107,36 @@ export default function DescriptionBlocksEditor({
                     <option value="left">Left</option>
                     <option value="right">Right</option>
                   </select>
+                </label>
+              </div>
+
+              <div className="grid gap-3 md:grid-cols-2">
+                <label className="flex flex-col gap-1 text-xs font-medium text-zinc-700">
+                  Title
+                  <input
+                    type="text"
+                    placeholder="Block title"
+                    className="rounded border border-zinc-300 px-2 py-1.5 text-sm text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                    required
+                    value={block.title}
+                    onChange={(e) =>
+                      handleUpdateBlock(index, "title", e.target.value)
+                    }
+                  />
+                </label>
+
+                <label className="flex flex-col gap-1 text-xs font-medium text-zinc-700">
+                  Button Link
+                  <input
+                    type="url"
+                    placeholder="https://example.com"
+                    className="rounded border border-zinc-300 px-2 py-1.5 text-sm text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                    required
+                    value={block.buttonLink}
+                    onChange={(e) =>
+                      handleUpdateBlock(index, "buttonLink", e.target.value)
+                    }
+                  />
                 </label>
               </div>
 

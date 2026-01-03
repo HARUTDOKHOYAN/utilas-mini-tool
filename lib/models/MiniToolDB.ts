@@ -4,7 +4,7 @@ const DescriptionBlockSchema = new mongoose.Schema({
   image: { type: String, required: true },
   text: { type: String, required: true },
     title: { type: String, required: true },
-    buttonLink: { type: String, required: false },
+    buttonLink: { type: String },
     orientation: {
     type: String,
     enum: ["left", "right"],

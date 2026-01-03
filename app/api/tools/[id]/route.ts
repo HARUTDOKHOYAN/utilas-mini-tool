@@ -115,37 +115,6 @@ export async function PUT(
       }
     }
 
-    // Validate keyFeatures if provided
-    if (updates.keyFeatures !== undefined && Array.isArray(updates.keyFeatures)) {
-      for (let i = 0; i < updates.keyFeatures.length; i++) {
-        const feature = updates.keyFeatures[i];
-        if (!feature || typeof feature !== 'object') {
-          return NextResponse.json(
-            { message: `Key feature ${i + 1} must be an object.` },
-            { status: 400 }
-          );
-        }
-        if (!feature.image || typeof feature.image !== 'string') {
-          return NextResponse.json(
-            { message: `Key feature ${i + 1} must have a valid image URL.` },
-            { status: 400 }
-          );
-        }
-        if (!feature.title || typeof feature.title !== 'string') {
-          return NextResponse.json(
-            { message: `Key feature ${i + 1} must have a title.` },
-            { status: 400 }
-          );
-        }
-        if (!feature.description || typeof feature.description !== 'string') {
-          return NextResponse.json(
-            { message: `Key feature ${i + 1} must have a description.` },
-            { status: 400 }
-          );
-        }
-      }
-    }
-
     const tool = await MiniToolDB.findOne({ id });
 
     if (!tool) {

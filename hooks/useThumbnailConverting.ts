@@ -21,7 +21,8 @@ export function useThumbnailConverting(options: UseThumbnailConvertingOptions = 
         setThumbnailConverting(true);
         const base64 = await uploadImageToBase64(file);
         onConverted(base64);
-      } catch (err) {
+      }
+      catch (err) {
         const msg =
           err instanceof Error ? err.message : "Failed to convert image to base64.";
         if (onError) {

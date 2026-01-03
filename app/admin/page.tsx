@@ -1,7 +1,6 @@
 "use client";
 
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
@@ -24,7 +23,6 @@ import SearchInput from "@/Components/SearchInput";
 import {useToolSearch} from "@/hooks/useToolSearch";
 import PreviewToolFormModal from "@/Components/PreviewToolFormModal";
 import {ApiError, MiniToolPayloadDto} from "@/lib/api";
-import { ensureTagsExist } from "@/lib/utils/tagHelpers";
 
 const defaultForm: MiniToolPayloadDto = {
   id: "",
@@ -35,8 +33,6 @@ const defaultForm: MiniToolPayloadDto = {
   thumbnail: "",
   iframeSlug: "",
   iframeHtml: "",
-  appType: "html",
-  tags: [],
 };
 
 const defaultPreviewForm: MiniToolPrevPayload = {
@@ -45,7 +41,6 @@ const defaultPreviewForm: MiniToolPrevPayload = {
   summary: "",
   thumbnail: "",
   toolId: "",
-  tags: [],
 };
 
 export default function AdminPage() {
@@ -176,7 +171,6 @@ export default function AdminPage() {
         iframeSlug: tool.iframeSlug,
         iframeHtml: tool.iframeHtml || "",
         appType: tool.appType || "html",
-        tags: Array.isArray(tool.tags) ? tool.tags : [],
       });
       setReactAppFile(null);
       setIsModalOpen(true);
@@ -218,7 +212,6 @@ export default function AdminPage() {
       summary: toolPrev.summary,
       thumbnail: toolPrev.thumbnail,
       toolId: toolPrev.toolId,
-      tags: Array.isArray(toolPrev.tags) ? toolPrev.tags : [],
     });
     setIsPreviewModalOpen(true);
   }
@@ -255,17 +248,15 @@ export default function AdminPage() {
       setSaving(false);
       return;
     }
-    
+
 
     // Validate each key feature
-    if (Array.isArray(formData.keyFeatures)) {
-      for (let i = 0; i < formData.keyFeatures.length; i++) {
-        const feature = formData.keyFeatures[i];
-        if (!feature.image || !feature.title || !feature.description) {
-          setError(`Key feature ${i + 1} is incomplete. Please fill in all fields.`);
-          setSaving(false);
-          return;
-        }
+    for (let i = 0; i < formData.keyFeatures.length; i++) {
+      const feature = formData.keyFeatures[i];
+      if (!feature.image || !feature.title || !feature.description) {
+        setError(`Key feature ${i + 1} is incomplete. Please fill in all fields.`);
+        setSaving(false);
+        return;
       }
     }
 
@@ -287,11 +278,6 @@ export default function AdminPage() {
     }
 
     try {
-      // Ensure all tags exist in the database before saving
-      if (formData.tags && Array.isArray(formData.tags) && formData.tags.length > 0) {
-        await ensureTagsExist(formData.tags);
-      }
-
       if (editing) {
         const { id: preservedId, ...rest } = formData;
         // Remove iframeHtml for React apps
@@ -356,11 +342,6 @@ export default function AdminPage() {
     }
 
     try {
-      // Ensure all tags exist in the database before saving
-      if (previewFormData.tags && Array.isArray(previewFormData.tags) && previewFormData.tags.length > 0) {
-        await ensureTagsExist(previewFormData.tags);
-      }
-
       if (previewEditing) {
         const { id, ...rest } = previewFormData;
         const updated = await updateToolPreview(id, rest);

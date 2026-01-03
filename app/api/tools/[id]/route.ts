@@ -100,15 +100,46 @@ export async function PUT(
             { status: 400 }
           );
         }
-        if (!block.buttonLink || typeof block.buttonLink !== 'string') {
+        if (block.buttonLink !== undefined && typeof block.buttonLink !== 'string') {
           return NextResponse.json(
-            { message: `Description block ${i + 1} must have a button link.` },
+            { message: `Description block ${i + 1} button link must be a string if provided.` },
             { status: 400 }
           );
         }
         if (!block.orientation || !['left', 'right'].includes(block.orientation)) {
           return NextResponse.json(
             { message: `Description block ${i + 1} must have orientation 'left' or 'right'.` },
+            { status: 400 }
+          );
+        }
+      }
+    }
+
+    // Validate keyFeatures if provided
+    if (updates.keyFeatures !== undefined && Array.isArray(updates.keyFeatures)) {
+      for (let i = 0; i < updates.keyFeatures.length; i++) {
+        const feature = updates.keyFeatures[i];
+        if (!feature || typeof feature !== 'object') {
+          return NextResponse.json(
+            { message: `Key feature ${i + 1} must be an object.` },
+            { status: 400 }
+          );
+        }
+        if (!feature.image || typeof feature.image !== 'string') {
+          return NextResponse.json(
+            { message: `Key feature ${i + 1} must have a valid image URL.` },
+            { status: 400 }
+          );
+        }
+        if (!feature.title || typeof feature.title !== 'string') {
+          return NextResponse.json(
+            { message: `Key feature ${i + 1} must have a title.` },
+            { status: 400 }
+          );
+        }
+        if (!feature.description || typeof feature.description !== 'string') {
+          return NextResponse.json(
+            { message: `Key feature ${i + 1} must have a description.` },
             { status: 400 }
           );
         }

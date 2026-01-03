@@ -131,7 +131,6 @@ export default function DescriptionBlocksEditor({
                     type="url"
                     placeholder="https://example.com"
                     className="rounded border border-zinc-300 px-2 py-1.5 text-sm text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
-                    required
                     value={block.buttonLink}
                     onChange={(e) =>
                       handleUpdateBlock(index, "buttonLink", e.target.value)

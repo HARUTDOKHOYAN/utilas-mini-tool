@@ -4,7 +4,7 @@
     id: string;
     title: string;
     summary: string;
-    keyFeatures: KeyFeatureBlock[];
+    keyFeatures?: KeyFeatureBlock[];
     description: DescriptionBlock[];
     thumbnail: string;
     iframeSlug: string;
@@ -22,7 +22,7 @@ export type DescriptionBlock = {
     image: string;
     text: string;
     title: string;
-    buttonLink: string;
+    buttonLink?: string;
     orientation: "left" | "right";
 };
 

@@ -81,9 +81,9 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
-      if (!block.buttonLink || typeof block.buttonLink !== 'string') {
+      if (block.buttonLink !== undefined && typeof block.buttonLink !== 'string') {
         return NextResponse.json(
-          { message: `Description block ${i + 1} must have a button link.` },
+          { message: `Description block ${i + 1} button link must be a string if provided.` },
           { status: 400 }
         );
       }
@@ -95,11 +95,42 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Validate keyFeatures if provided
+    if (keyFeatures && Array.isArray(keyFeatures)) {
+      for (let i = 0; i < keyFeatures.length; i++) {
+        const feature = keyFeatures[i];
+        if (!feature || typeof feature !== 'object') {
+          return NextResponse.json(
+            { message: `Key feature ${i + 1} must be an object.` },
+            { status: 400 }
+          );
+        }
+        if (!feature.image || typeof feature.image !== 'string') {
+          return NextResponse.json(
+            { message: `Key feature ${i + 1} must have a valid image URL.` },
+            { status: 400 }
+          );
+        }
+        if (!feature.title || typeof feature.title !== 'string') {
+          return NextResponse.json(
+            { message: `Key feature ${i + 1} must have a title.` },
+            { status: 400 }
+          );
+        }
+        if (!feature.description || typeof feature.description !== 'string') {
+          return NextResponse.json(
+            { message: `Key feature ${i + 1} must have a description.` },
+            { status: 400 }
+          );
+        }
+      }
+    }
+
     const createData: any = {
       id,
       title,
       summary,
-      keyFeatures,
+      keyFeatures: Array.isArray(keyFeatures) ? keyFeatures : [],
       description,
       thumbnail,
       iframeSlug,
@@ -138,6 +169,9 @@ export async function POST(request: NextRequest) {
       );
     }
     console.error("Error creating tool:", error);
+    if (error.errors) {
+      console.error("Validation errors:", error.errors);
+    }
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }

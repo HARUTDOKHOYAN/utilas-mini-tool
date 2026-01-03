@@ -255,21 +255,17 @@ export default function AdminPage() {
       setSaving(false);
       return;
     }
-
-    // Validate key features
-    if (!Array.isArray(formData.keyFeatures) || formData.keyFeatures.length === 0) {
-      setError("Please add at least one key feature.");
-      setSaving(false);
-      return;
-    }
+    
 
     // Validate each key feature
-    for (let i = 0; i < formData.keyFeatures.length; i++) {
-      const feature = formData.keyFeatures[i];
-      if (!feature.image || !feature.title || !feature.description) {
-        setError(`Key feature ${i + 1} is incomplete. Please fill in all fields.`);
-        setSaving(false);
-        return;
+    if (Array.isArray(formData.keyFeatures)) {
+      for (let i = 0; i < formData.keyFeatures.length; i++) {
+        const feature = formData.keyFeatures[i];
+        if (!feature.image || !feature.title || !feature.description) {
+          setError(`Key feature ${i + 1} is incomplete. Please fill in all fields.`);
+          setSaving(false);
+          return;
+        }
       }
     }
 

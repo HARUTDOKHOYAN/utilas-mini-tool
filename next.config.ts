@@ -29,7 +29,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Access-Control-Allow-Origin",
-            value: "https://www.utilas.net/",
+            value: "https://www.utilas.net",
           },
           {
             key: "Access-Control-Allow-Methods",

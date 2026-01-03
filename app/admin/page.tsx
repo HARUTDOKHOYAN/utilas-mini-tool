@@ -251,14 +251,19 @@ export default function AdminPage() {
 
 
     // Validate each key feature
-    for (let i = 0; i < formData.keyFeatures.length; i++) {
-      const feature = formData.keyFeatures[i];
-      if (!feature.image || !feature.title || !feature.description) {
-        setError(`Key feature ${i + 1} is incomplete. Please fill in all fields.`);
-        setSaving(false);
-        return;
+    if(formData.keyFeatures !== undefined)
+    {
+      for (let i = 0; i < formData.keyFeatures.length; i++) {
+        const feature = formData.keyFeatures[i];
+        if (!feature.image || !feature.title || !feature.description) {
+          setError(`Key feature ${i + 1} is incomplete. Please fill in all fields.`);
+          setSaving(false);
+          return;
+        }
       }
     }
+
+
 
     // Validate description blocks
     if (!Array.isArray(formData.description) || formData.description.length === 0) {

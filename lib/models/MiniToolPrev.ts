@@ -5,7 +5,7 @@ export interface IMiniToolPrev extends Document {
     summary:  string;
     thumbnail:string;
     toolId:string;
-    tags: string[];
+    components?: string[];
 }
 
 const miniToolPrevSchema = new Schema<IMiniToolPrev>(
@@ -36,7 +36,7 @@ const miniToolPrevSchema = new Schema<IMiniToolPrev>(
             required: true,
             trim: true,
         },
-        tags: {
+        components: {
             type: [String],
             default: [],
             trim: true,

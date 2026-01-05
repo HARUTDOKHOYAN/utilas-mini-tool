@@ -48,6 +48,11 @@ const miniToolSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    components: {
+      type: [String],
+      default: [],
+      trim: true,
+    },
     thumbnail: {
       type: String,
       required: true,

@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     await connectDB();
 
     const body = await request.json();
-    const { id, title, summary, keyFeatures, description, thumbnail, iframeSlug, appType, tags } = body;
+    const { id, title, summary, keyFeatures, description, components, thumbnail, iframeSlug, appType, tags } = body;
 
     if (
       !id ||
@@ -111,6 +111,11 @@ export async function POST(request: NextRequest) {
       createData.tags = tags;
     }
 
+    // Add components if provided
+    if (components && Array.isArray(components)) {
+      createData.components = components;
+    }
+
     const created = await MiniToolDB.create(createData);
 
     // Create preview entry
@@ -125,6 +130,11 @@ export async function POST(request: NextRequest) {
     // Add tags to preview if provided
     if (tags && Array.isArray(tags)) {
       previewData.tags = tags;
+    }
+
+    // Add components to preview if provided
+    if (components && Array.isArray(components)) {
+      previewData.components = components;
     }
 
     await MiniToolPrev.create(previewData);

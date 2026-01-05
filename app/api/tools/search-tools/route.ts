@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
-import MiniToolPrev from '@/lib/models/MiniToolPrev';
+import MiniToolPrev, {IMiniToolPrev} from '@/lib/models/MiniToolPrev';
+import {ComponentFiltering} from "@/lib/ToolFiltering/Filters";
 
 export async function GET(request: NextRequest) {
   try {
@@ -8,6 +9,7 @@ export async function GET(request: NextRequest) {
 
     const searchParams = request.nextUrl.searchParams;
     const q = searchParams.get('q');
+    const componentFilter = searchParams.getAll('componentFilter');
 
     if (!q || q.trim() === "") {
       return NextResponse.json(
@@ -16,18 +18,10 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const searchQuery = q.trim();
-    const searchRegex = new RegExp(searchQuery, "i");
-
-    const tools = await MiniToolPrev.find({
-      $or: [
-        { title: searchRegex },
-      ],
-    })
-      .sort({ createdAt: -1 })
-      .lean();
-
+    let tools : IMiniToolPrev[] | unknown = await GetTools(q);
+    tools = ComponentFiltering(tools,componentFilter)
     return NextResponse.json(tools);
+
   } catch (error) {
     console.error("Error searching tools:", error);
     return NextResponse.json(
@@ -36,3 +30,19 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
+function  GetTools(query: string): Promise<IMiniToolPrev> | unknown
+{
+    const searchQuery = query.trim();
+    const searchRegex = new RegExp(searchQuery, "i");
+
+    return   MiniToolPrev.find({
+        $or: [
+            { title: searchRegex },
+        ],
+    })
+        .sort({ createdAt: -1 })
+        .lean() as unknown as IMiniToolPrev[];
+
+}
+

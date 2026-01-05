@@ -112,6 +112,26 @@ export default async function ToolDetailPage({
                   </td>
                 </tr>
               )}
+
+              {tool.components && tool.components.length > 0 && (
+                <tr className="align-top">
+                  <td className="bg-zinc-50 px-4 py-3 font-medium text-zinc-700">
+                    Components
+                  </td>
+                  <td className="px-4 py-3 text-zinc-900">
+                    <div className="flex flex-wrap gap-2">
+                      {tool.components.map((component) => (
+                        <span
+                          key={component}
+                          className="inline-flex items-center rounded-full border border-green-200 bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700"
+                        >
+                          {component}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

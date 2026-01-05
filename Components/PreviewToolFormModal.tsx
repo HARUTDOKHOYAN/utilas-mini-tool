@@ -4,6 +4,7 @@ import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { MiniToolPrev, MiniToolPrevPayload, searchTools } from "@/lib/api";
 import SearchInput from "@/Components/SearchInput";
 import TagSelector from "@/Components/TagSelector";
+import ComponentSelector from "@/Components/ComponentSelector";
 import {ImageUploadComponent} from "@/Components/ImageUploadComponent";
 
 type PreviewToolFormModalProps = {
@@ -278,6 +279,18 @@ export default function PreviewToolFormModal({
                   setFormData((prev) => ({
                     ...prev,
                     tags: tags,
+                  }))
+                }
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <ComponentSelector
+                selectedComponents={Array.isArray(formData.components) ? formData.components : []}
+                onChange={(components) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    components: components,
                   }))
                 }
               />

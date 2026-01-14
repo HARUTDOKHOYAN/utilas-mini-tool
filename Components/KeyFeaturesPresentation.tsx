@@ -1,5 +1,5 @@
+import ImageWithErrorHandling from "@/Components/ImageWithErrorHandling";
 import { KeyFeatureBlock } from "@/lib/models/DTOs/MiniToolDto";
-import Image from "next/image";
 
 type KeyFeaturesPresentationProps = {
   keyFeatures: KeyFeatureBlock[];
@@ -22,10 +22,9 @@ export default function KeyFeaturesPresentation({
           <div className="flex items-center gap-3">
             <div className="relative h-10 w-10 overflow-hidden rounded-full bg-blue-50">
               {feature.image ? (
-                <Image
+                <ImageWithErrorHandling
                   src={feature.image}
                   alt={feature.title}
-                  fill
                   className="object-cover"
                   sizes="40px"
                 />

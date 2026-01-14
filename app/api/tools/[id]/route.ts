@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import MiniToolDB from '@/lib/models/MiniToolDB';
 import MiniToolPrev from '@/lib/models/MiniToolPrev';
-import { deleteFile } from '@/lib/services/fileStorage';
+import { StorageServiceFactory } from '@/lib/services/SrorageService/storageServiceFactory';
 import { getBaseUrl, withIframeUrl } from '@/lib/utils/toolHelpers';
 import { requireAuth } from '@/lib/auth';
+import { getRemovedImageUrls, deleteImagesFromStorage } from '@/lib/utils/imageCleanup';
 
 export async function GET(
   request: NextRequest,
@@ -124,11 +125,22 @@ export async function PUT(
       );
     }
 
+    // Get old tool data for comparison
+    const oldTool = tool.toObject();
+
     const updated = await MiniToolDB.findOneAndUpdate(
       { id },
       updates,
       { new: true, runValidators: true }
     );
+
+    // Cleanup removed images
+    if (updated) {
+      const removedUrls = getRemovedImageUrls(oldTool, updated.toObject());
+      if (removedUrls.length > 0) {
+        await deleteImagesFromStorage(removedUrls);
+      }
+    }
 
     // Update preview entry if title, summary, thumbnail, tags, or components changed
     if (updates.title || updates.summary || updates.thumbnail || updates.tags !== undefined || updates.components !== undefined) {
@@ -198,10 +210,15 @@ export async function DELETE(
       );
     }
 
-    // Delete associated blob from Vercel Blob if it exists
+    // Delete associated blob from storage if it exists
     if (tool.reactAppBlobUrl) {
-      await deleteFile(tool.reactAppBlobUrl);
+      const storageService = StorageServiceFactory.getService();
+      await storageService.deleteFile(tool.reactAppBlobUrl);
     }
+
+    // Delete all associated images
+    const { cleanupToolImages } = await import('@/lib/utils/imageCleanup');
+    await cleanupToolImages(tool.toObject());
 
     await MiniToolDB.findOneAndDelete({ id });
     // Remove ALL previews referencing this tool to avoid broken redirects.

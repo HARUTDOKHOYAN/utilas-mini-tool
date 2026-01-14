@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import MiniToolDB from '@/lib/models/MiniToolDB';
 import { getZipFileEntryByBuffer } from '@/lib/services/reactZipProcessing';
-import { storeFile, deleteFile } from '@/lib/services/fileStorage';
+import { StorageServiceFactory } from '@/lib/services/SrorageService/storageServiceFactory';
 import { getBaseUrl, withIframeUrl } from '@/lib/utils/toolHelpers';
 import { requireAuth } from '@/lib/auth';
 
@@ -78,13 +78,16 @@ export async function POST(
 
     console.log(`[Upload] index.html found, proceeding to upload to Vercel Blob`);
     
+    // Get storage service
+    const storageService = StorageServiceFactory.getService();
+    
     // Delete old blob if it exists
     if (tool.reactAppBlobUrl) {
-      await deleteFile(tool.reactAppBlobUrl);
+      await storageService.deleteFile(tool.reactAppBlobUrl);
     }
     
-    const blobUrl = await storeFile(tool.id, buffer);
-    console.log(`[Upload] File uploaded successfully to Vercel Blob: ${blobUrl}`);
+    const blobUrl = await storageService.storeFile(tool.id, buffer, 'application/zip');
+    console.log(`[Upload] File uploaded successfully : ${blobUrl}`);
 
     const baseUrl = getBaseUrl();
     const reactAppPath = `/mini-tools-react/${tool.iframeSlug}/`;

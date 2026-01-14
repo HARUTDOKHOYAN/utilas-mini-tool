@@ -87,8 +87,8 @@ export default function DescriptionBlocksEditor({
               </div>
 
               <div className="grid gap-3 md:grid-cols-2">
-                <ImageUploadComponent onConverted={ (base64) =>
-                    handleUpdateBlock(index, "image", base64)}/>
+                <ImageUploadComponent onUploaded={(url) =>
+                    handleUpdateBlock(index, "image", url)}/>
 
                 <label className="flex flex-col gap-1 text-xs font-medium text-zinc-700">
                   Orientation

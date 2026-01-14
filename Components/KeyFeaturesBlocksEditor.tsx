@@ -85,8 +85,8 @@ export default function KeyFeaturesBlocksEditor({
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-medium text-zinc-700">Icon Image</label>
                   <ImageUploadComponent
-                    onConverted={(base64) =>
-                      handleUpdateFeature(index, "image", base64)
+                    onUploaded={(url) =>
+                      handleUpdateFeature(index, "image", url)
                     }
                   />
                 </div>

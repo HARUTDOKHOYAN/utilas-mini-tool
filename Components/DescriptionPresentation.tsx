@@ -1,4 +1,4 @@
-import Image from "next/image";
+import ImageWithErrorHandling from "@/Components/ImageWithErrorHandling";
 import {DescriptionBlock} from "@/lib/models/DTOs/MiniToolDto";
 
 type DescriptionPresentationProps = {
@@ -81,7 +81,7 @@ export default function DescriptionPresentation({
                 <td className="px-4 py-3 text-zinc-900">
                   {block.image ? (
                     <div className="relative h-28 w-44 overflow-hidden rounded-md bg-zinc-100">
-                      <Image
+                      <ImageWithErrorHandling
                         src={block.image}
                         alt={`${toolTitle} - Description image ${index + 1}`}
                         fill

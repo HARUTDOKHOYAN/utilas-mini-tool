@@ -215,8 +215,8 @@ export default function ToolFormModal({
             <ImageUploadComponent
                 isRequired={!editing && !formData.thumbnail}
                 isDisabled={saving}
-                onConverted={(base64) =>
-                  setFormData((prev) => ({ ...prev, thumbnail: base64 }))
+                onUploaded={(url) =>
+                  setFormData((prev) => ({ ...prev, thumbnail: url }))
                 }
             />
             <label className="flex flex-col gap-2 text-sm font-medium text-zinc-700">

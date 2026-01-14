@@ -5,6 +5,7 @@ import { MiniTool } from "@/lib/api";
 import DescriptionBlocksEditor from "./DescriptionBlocksEditor";
 import KeyFeaturesBlocksEditor from "./KeyFeaturesBlocksEditor";
 import TagSelector from "./TagSelector";
+import ComponentSelector from "./ComponentSelector";
 import {MiniToolPayloadDto} from "@/lib/api";
 import {ImageUploadComponent} from "@/Components/ImageUploadComponent";
 
@@ -167,6 +168,18 @@ export default function ToolFormModal({
                   setFormData((prev) => ({
                     ...prev,
                     tags: tags,
+                  }))
+                }
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <ComponentSelector
+                selectedComponents={Array.isArray(formData.components) ? formData.components : []}
+                onChange={(components) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    components: components,
                   }))
                 }
               />

@@ -30,8 +30,10 @@ const defaultForm: MiniToolPayloadDto = {
   summary: "",
   keyFeatures: [],
   description: [],
+  components: [],
   thumbnail: "",
   iframeSlug: "",
+  tags: [],
   iframeHtml: "",
 };
 
@@ -41,6 +43,8 @@ const defaultPreviewForm: MiniToolPrevPayload = {
   summary: "",
   thumbnail: "",
   toolId: "",
+  tags: [],
+  components: [],
 };
 
 export default function AdminPage() {
@@ -167,8 +171,10 @@ export default function AdminPage() {
         summary: tool.summary,
         keyFeatures: Array.isArray(tool.keyFeatures) ? tool.keyFeatures : [],
         description: Array.isArray(tool.description) ? tool.description : [],
+        components: Array.isArray(tool.components) ? tool.components : [],
         thumbnail: tool.thumbnail,
         iframeSlug: tool.iframeSlug,
+        tags: Array.isArray(tool.tags) ? tool.tags : [],
         iframeHtml: tool.iframeHtml || "",
         appType: tool.appType || "html",
       });
@@ -212,6 +218,8 @@ export default function AdminPage() {
       summary: toolPrev.summary,
       thumbnail: toolPrev.thumbnail,
       toolId: toolPrev.toolId,
+      tags: Array.isArray(toolPrev.tags) ? toolPrev.tags : [],
+      components: Array.isArray(toolPrev.components) ? toolPrev.components : [],
     });
     setIsPreviewModalOpen(true);
   }

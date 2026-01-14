@@ -130,8 +130,8 @@ export async function PUT(
       { new: true, runValidators: true }
     );
 
-    // Update preview entry if title, summary, thumbnail, or tags changed
-    if (updates.title || updates.summary || updates.thumbnail || updates.tags !== undefined) {
+    // Update preview entry if title, summary, thumbnail, tags, or components changed
+    if (updates.title || updates.summary || updates.thumbnail || updates.tags !== undefined || updates.components !== undefined) {
       const previewUpdate: any = {
         title: updated.title,
         summary: updated.summary,
@@ -141,6 +141,11 @@ export async function PUT(
       // Sync tags if they were updated
       if (updates.tags !== undefined) {
         previewUpdate.tags = updated.tags || [];
+      }
+
+      // Sync components if they were updated
+      if (updates.components !== undefined) {
+        previewUpdate.components = updated.components || [];
       }
       
       await MiniToolPrev.findOneAndUpdate(

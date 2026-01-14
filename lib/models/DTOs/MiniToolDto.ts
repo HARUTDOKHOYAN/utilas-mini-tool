@@ -6,6 +6,7 @@
     summary: string;
     keyFeatures?: KeyFeatureBlock[];
     description: DescriptionBlock[];
+    components?: string[];
     thumbnail: string;
     iframeSlug: string;
     tags?: string[];

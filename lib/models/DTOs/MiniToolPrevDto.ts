@@ -5,4 +5,5 @@ export type MiniToolPrevDto = {
     thumbnail: string;
     toolId: string;
     tags?: string[];
+    components?: string[];
 };

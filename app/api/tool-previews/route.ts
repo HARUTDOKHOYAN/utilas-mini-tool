@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     await connectDB();
 
     const body = await request.json();
-    const { id, title, summary, thumbnail, toolId, tags } = body ?? {};
+    const { id, title, summary, thumbnail, toolId, tags, components } = body ?? {};
 
     if (!id || !title || !summary || !thumbnail || !toolId) {
       return NextResponse.json(
@@ -42,6 +42,11 @@ export async function POST(request: NextRequest) {
     // Add tags if provided
     if (tags && Array.isArray(tags)) {
       createData.tags = tags;
+    }
+
+    // Add components if provided
+    if (components && Array.isArray(components)) {
+      createData.components = components;
     }
 
     const created = await MiniToolPrev.create(createData);

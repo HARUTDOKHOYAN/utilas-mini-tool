@@ -307,8 +307,8 @@ export default function PreviewToolFormModal({
               />
             </label>
             <ImageUploadComponent
-                onConverted={(base64) =>
-                    setFormData((prev) => ({ ...prev, thumbnail: base64 }))
+                onUploaded={(url) =>
+                    setFormData((prev) => ({ ...prev, thumbnail: url }))
                 }
             />
             <div className="flex items-center gap-3 md:col-span-2">

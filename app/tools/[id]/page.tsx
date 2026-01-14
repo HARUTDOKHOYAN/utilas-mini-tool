@@ -1,11 +1,10 @@
-import Image from "next/image";
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getTool } from "@/lib/api";
 import DescriptionPresentation from "@/Components/DescriptionPresentation";
 import KeyFeaturesPresentation from "@/Components/KeyFeaturesPresentation";
 import { getServerSession } from "@/lib/auth";
 import {ApiError} from "@/lib/api";
+import ImageWithErrorHandling from "@/Components/ImageWithErrorHandling";
 
 type ToolPageProps = {
   params: { id: string };
@@ -79,7 +78,7 @@ export default async function ToolDetailPage({
                 <td className="px-4 py-3 text-zinc-900">
                   {tool.thumbnail ? (
                     <div className="relative h-28 w-44 overflow-hidden rounded-md bg-zinc-100">
-                      <Image
+                      <ImageWithErrorHandling
                         src={tool.thumbnail}
                         alt={tool.title}
                         fill

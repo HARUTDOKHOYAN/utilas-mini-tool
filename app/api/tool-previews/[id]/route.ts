@@ -3,6 +3,7 @@ import { connectDB } from "@/lib/mongodb";
 import MiniToolPrev from "@/lib/models/MiniToolPrev";
 import MiniToolDB from "@/lib/models/MiniToolDB";
 import { requireAuth } from "@/lib/auth";
+import { getRemovedImageUrls, deleteImagesFromStorage, cleanupToolImages } from "@/lib/utils/imageCleanup";
 
 export async function PUT(
   request: NextRequest,
@@ -38,10 +39,21 @@ export async function PUT(
       }
     }
 
+    // Get old preview data for comparison
+    const oldPreview = await MiniToolPrev.findOne({ id }).lean();
+    
     const updated = await MiniToolPrev.findOneAndUpdate({ id }, updates, {
       new: true,
       runValidators: true,
     });
+
+    // Cleanup removed images
+    if (updated && oldPreview) {
+      const removedUrls = getRemovedImageUrls(oldPreview, updated.toObject());
+      if (removedUrls.length > 0) {
+        await deleteImagesFromStorage(removedUrls);
+      }
+    }
 
     if (!updated) {
       return NextResponse.json({ message: "Preview not found." }, { status: 404 });
@@ -73,12 +85,16 @@ export async function DELETE(
       return NextResponse.json({ message: "Preview not found." }, { status: 404 });
     }
 
+    // Delete associated images
+    await cleanupToolImages(deleted.toObject());
+
     return new NextResponse(null, { status: 204 });
   } catch (error) {
     console.error("Error deleting tool preview:", error);
     return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 }
+
 
 
 

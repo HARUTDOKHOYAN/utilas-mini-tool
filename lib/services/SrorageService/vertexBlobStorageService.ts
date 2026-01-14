@@ -2,33 +2,29 @@ import {IStorageService} from "@/lib/services/SrorageService/IStorageService";
 import {del, put} from "@vercel/blob";
 
 export class VertexBlobStorageService implements IStorageService {
-    public async fetchFile(url: string): Promise<Buffer | undefined> {
-        try {
-            const response = await fetch(url);
 
-            if (!response.ok) {
-                console.error(`[Blob Storage] Failed to fetch blob: ${url}, status: ${response.status}`);
-                return undefined;
-            }
-
-            const arrayBuffer = await response.arrayBuffer();
-            return Buffer.from(arrayBuffer);
-        } catch (error) {
-            console.error(`[Blob Storage] Error fetching blob:`, error);
-            return undefined;
+    public async storeFile(id: string, buffer: Buffer, mimeType: string = 'application/zip'): Promise<string> {
+        // Determine file extension and path based on mimeType
+        let extension = '.zip';
+        let folder = 'react-apps';
+        
+        if (mimeType.startsWith('image/')) {
+            folder = 'images';
+            if (mimeType === 'image/jpeg') extension = '.jpg';
+            else if (mimeType === 'image/png') extension = '.png';
+            else if (mimeType === 'image/webp') extension = '.webp';
+            else extension = '.jpg'; // default fallback
         }
-    }
-
-    public async storeFile(id: string, buffer: Buffer): Promise<string> {
-        const fileName = `react-apps/${id}-${Date.now()}.zip`;
+        
+        const fileName = `${folder}/${id}-${Date.now()}${extension}`;
 
         const blob = await put(fileName, buffer, {
             access: 'public',
-            contentType: 'application/zip',
+            contentType: mimeType,
             token: process.env.BLOB_READ_WRITE_TOKEN,
         });
 
-        console.log(`[Blob Storage] Uploaded zip to: ${blob.url}`);
+        console.log(`[Blob Storage] Uploaded file to: ${blob.url}`);
         return blob.url;
     }
 

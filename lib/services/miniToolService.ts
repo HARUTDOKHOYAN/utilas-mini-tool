@@ -32,7 +32,6 @@ export function getMiniToolContent(fileEntry: ZipEntry, basePath: string = ""): 
     return {};
   }
 
-  // If it's an HTML file and we have a basePath, rewrite absolute paths
   if (basePath && (fileEntry.entryName.endsWith('.html') || fileEntry.entryName.endsWith('.htm'))) {
     try {
       const htmlString = fileContent.toString('utf8');

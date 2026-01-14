@@ -1,5 +1,4 @@
 import AdmZip from "adm-zip";
-import { fetchFile } from "./fileStorage";
 
 interface ZipEntry {
   entryName: string;
@@ -10,6 +9,23 @@ interface ZipEntry {
 interface NormalizedEntry {
   entry: ZipEntry;
   name: string;
+}
+
+async function fetchFile(url: string): Promise<Buffer | undefined> {
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      console.error(`[React App] Failed to fetch file from ${url}: ${response.status} ${response.statusText}`);
+      return undefined;
+    }
+
+    const arrayBuffer = await response.arrayBuffer();
+    return Buffer.from(arrayBuffer);
+  } catch (error) {
+    console.error(`[React App] Error fetching file from ${url}:`, error);
+    return undefined;
+  }
 }
 
 export function getZipFileEntryByBuffer(buffer: Buffer): ZipEntry[] {

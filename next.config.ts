@@ -5,19 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "images.unsplash.com",
-      },
-      {
-        protocol: "https",
-        hostname: "www.google.com",
-      },
-      {
-        protocol: "http",
-        hostname: "localhost",
-      },
-      {
-        protocol: "http",
-        hostname: "127.0.0.1",
+        hostname: "*public.blob.vercel-storage.com*",
       },
     ],
   },
@@ -29,7 +17,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Access-Control-Allow-Origin",
-            value: "https://www.utilas.net/",
+            value: "*",
           },
           {
             key: "Access-Control-Allow-Methods",
@@ -51,7 +39,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Access-Control-Allow-Origin",
-            value: "https://www.utilas.net",
+            value: "*",
           },
           {
             key: "Access-Control-Allow-Methods",
